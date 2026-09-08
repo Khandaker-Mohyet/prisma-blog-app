@@ -43,16 +43,17 @@ export const auth = betterAuth({
     requireEmailVerification: true
   },
   emailVerification: {
-    sendOnSignUp:true,
+    sendOnSignUp: true,
+    autoSignInAfterVerification: true,
     sendVerificationEmail: async ({ user, url, token }, request) => {
-      const verificationUrl=`{process.env.APP_URL}/verify-email?token=${token}`
+      const verificationUrl = `${process.env.APP_URL}/verify-email?token=${token}`
       try {
         const info = await transporter.sendMail({
-        from: '"Example Team" <team@example.com>', // sender address
-        to: user.email, // list of recipients
-        subject: "Please verify your email", // subject line
-        text: "Hello world?", // plain text body
-        html: `
+          from: '"Example Team" <team@example.com>', // sender address
+          to: user.email, // list of recipients
+          subject: "Please verify your email", // subject line
+          text: "Hello world?", // plain text body
+          html: `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -250,13 +251,22 @@ export const auth = betterAuth({
 </body>
 </html>
   `, // HTML body
-      });
+        });
 
-      console.log("Message sent: %s", info.messageId);
+        console.log("Message sent: %s", info.messageId);
       } catch (error: any) {
         console.log(error.message)
         throw error
       }
+    },
+  },
+
+  socialProviders: {
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      accessType: "offline",
+      prompt: "select_account consent",
     },
   },
 });
