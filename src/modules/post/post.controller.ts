@@ -19,6 +19,23 @@ const createPost = async (req: Request, res: Response) => {
   }
 }
 
+
+const getAllPost = async(req: Request, res: Response)=>{
+  try {
+    
+  } catch (error:any) {
+    res.send(400).json({
+      massage: error.massage
+    })
+  }
+}
+
+
+
+
+
+
+
 export const PostController ={
   createPost
 }
